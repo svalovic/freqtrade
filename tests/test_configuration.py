@@ -65,7 +65,7 @@ def test_load_config_file(default_conf, mocker, caplog) -> None:
 
 def test__args_to_config(caplog):
 
-    arg_list = ['--strategy-path', 'TestTest']
+    arg_list = ['trade', '--strategy-path', 'TestTest']
     args = Arguments(arg_list).get_parsed_arg()
     configuration = Configuration(args)
     config = {}
@@ -93,7 +93,7 @@ def test_load_config_max_open_trades_zero(default_conf, mocker, caplog) -> None:
     default_conf['max_open_trades'] = 0
     patched_configuration_load_config_file(mocker, default_conf)
 
-    args = Arguments([]).get_parsed_arg()
+    args = Arguments(['trade']).get_parsed_arg()
     configuration = Configuration(args)
     validated_conf = configuration.load_config()
 
@@ -118,7 +118,7 @@ def test_load_config_combine_dicts(default_conf, mocker, caplog) -> None:
         configsmock
     )
 
-    arg_list = ['-c', 'test_conf.json', '--config', 'test2_conf.json', ]
+    arg_list = ['trade', '-c', 'test_conf.json', '--config', 'test2_conf.json', ]
     args = Arguments(arg_list).get_parsed_arg()
     configuration = Configuration(args)
     validated_conf = configuration.load_config()
@@ -167,7 +167,7 @@ def test_load_config_max_open_trades_minus_one(default_conf, mocker, caplog) -> 
     default_conf['max_open_trades'] = -1
     patched_configuration_load_config_file(mocker, default_conf)
 
-    args = Arguments([]).get_parsed_arg()
+    args = Arguments(['trade']).get_parsed_arg()
     configuration = Configuration(args)
     validated_conf = configuration.load_config()
 
@@ -191,7 +191,7 @@ def test_load_config_file_exception(mocker) -> None:
 def test_load_config(default_conf, mocker) -> None:
     patched_configuration_load_config_file(mocker, default_conf)
 
-    args = Arguments([]).get_parsed_arg()
+    args = Arguments(['trade']).get_parsed_arg()
     configuration = Configuration(args)
     validated_conf = configuration.load_config()
 
@@ -204,6 +204,7 @@ def test_load_config_with_params(default_conf, mocker) -> None:
     patched_configuration_load_config_file(mocker, default_conf)
 
     arglist = [
+        'trade',
         '--strategy', 'TestStrategy',
         '--strategy-path', '/some/path',
         '--db-url', 'sqlite:///someurl',
@@ -223,6 +224,7 @@ def test_load_config_with_params(default_conf, mocker) -> None:
     patched_configuration_load_config_file(mocker, conf)
 
     arglist = [
+        'trade',
         '--strategy', 'TestStrategy',
         '--strategy-path', '/some/path'
     ]
@@ -239,6 +241,7 @@ def test_load_config_with_params(default_conf, mocker) -> None:
     patched_configuration_load_config_file(mocker, conf)
 
     arglist = [
+        'trade',
         '--strategy', 'TestStrategy',
         '--strategy-path', '/some/path'
     ]
@@ -255,6 +258,7 @@ def test_load_config_with_params(default_conf, mocker) -> None:
     patched_configuration_load_config_file(mocker, conf)
 
     arglist = [
+        'trade',
         '--strategy', 'TestStrategy',
         '--strategy-path', '/some/path'
     ]
@@ -273,6 +277,7 @@ def test_load_config_with_params(default_conf, mocker) -> None:
     patched_configuration_load_config_file(mocker, conf)
 
     arglist = [
+        'trade',
         '--strategy', 'TestStrategy',
         '--strategy-path', '/some/path'
     ]
@@ -290,7 +295,7 @@ def test_load_custom_strategy(default_conf, mocker) -> None:
     })
     patched_configuration_load_config_file(mocker, default_conf)
 
-    args = Arguments([]).get_parsed_arg()
+    args = Arguments(['trade']).get_parsed_arg()
     configuration = Configuration(args)
     validated_conf = configuration.load_config()
 
@@ -302,6 +307,7 @@ def test_show_info(default_conf, mocker, caplog) -> None:
     patched_configuration_load_config_file(mocker, default_conf)
 
     arglist = [
+        'trade',
         '--strategy', 'TestStrategy',
         '--db-url', 'sqlite:///tmp/testdb',
     ]
@@ -318,9 +324,9 @@ def test_setup_configuration_without_arguments(mocker, default_conf, caplog) -> 
     patched_configuration_load_config_file(mocker, default_conf)
 
     arglist = [
+        'backtesting',
         '--config', 'config.json',
         '--strategy', 'DefaultStrategy',
-        'backtesting'
     ]
 
     args = Arguments(arglist).get_parsed_arg()
@@ -360,11 +366,11 @@ def test_setup_configuration_with_arguments(mocker, default_conf, caplog) -> Non
         lambda x, *args, **kwargs: Path(x)
     )
     arglist = [
+        'backtesting',
         '--config', 'config.json',
         '--strategy', 'DefaultStrategy',
         '--datadir', '/foo/bar',
         '--userdir', "/tmp/freqtrade",
-        'backtesting',
         '--ticker-interval', '1m',
         '--enable-position-stacking',
         '--disable-max-market-positions',
@@ -414,8 +420,8 @@ def test_setup_configuration_with_stratlist(mocker, default_conf, caplog) -> Non
     patched_configuration_load_config_file(mocker, default_conf)
 
     arglist = [
-        '--config', 'config.json',
         'backtesting',
+        '--config', 'config.json',
         '--ticker-interval', '1m',
         '--export', '/bar/foo',
         '--strategy-list',
@@ -535,7 +541,7 @@ def test_cli_verbose_with_params(default_conf, mocker, caplog) -> None:
 
     # Prevent setting loggers
     mocker.patch('freqtrade.loggers._set_loggers', MagicMock)
-    arglist = ['-vvv']
+    arglist = ['trade', '-vvv']
     args = Arguments(arglist).get_parsed_arg()
 
     configuration = Configuration(args)
@@ -587,7 +593,7 @@ def test_set_logfile(default_conf, mocker):
     patched_configuration_load_config_file(mocker, default_conf)
 
     arglist = [
-        '--logfile', 'test_file.log',
+        'trade', '--logfile', 'test_file.log',
     ]
     args = Arguments(arglist).get_parsed_arg()
     configuration = Configuration(args)
@@ -603,7 +609,7 @@ def test_load_config_warn_forcebuy(default_conf, mocker, caplog) -> None:
     default_conf['forcebuy_enable'] = True
     patched_configuration_load_config_file(mocker, default_conf)
 
-    args = Arguments([]).get_parsed_arg()
+    args = Arguments(['trade']).get_parsed_arg()
     configuration = Configuration(args)
     validated_conf = configuration.load_config()
 
