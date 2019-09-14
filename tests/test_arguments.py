@@ -107,7 +107,7 @@ def test_parse_args_backtesting_custom() -> None:
     call_args = Arguments(args).get_parsed_arg()
     assert call_args["config"] == ['test_conf.json']
     assert call_args["verbosity"] == 0
-    assert call_args["subparser"] == 'backtesting'
+    assert call_args["command"] == 'backtesting'
     assert call_args["func"] is not None
     assert call_args["ticker_interval"] == '1m'
     assert call_args["refresh_pairs"] is True
@@ -126,7 +126,7 @@ def test_parse_args_hyperopt_custom() -> None:
     assert call_args["config"] == ['test_conf.json']
     assert call_args["epochs"] == 20
     assert call_args["verbosity"] == 0
-    assert call_args["subparser"] == 'hyperopt'
+    assert call_args["command"] == 'hyperopt'
     assert call_args["spaces"] == ['buy']
     assert call_args["func"] is not None
     assert callable(call_args["func"])
