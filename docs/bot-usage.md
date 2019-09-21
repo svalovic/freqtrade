@@ -38,8 +38,8 @@ optional arguments:
   --userdir PATH, --user-data-dir PATH
                         Path to userdata directory.
   -s NAME, --strategy NAME
-                        Specify strategy class name (default:
-                        `DefaultStrategy`).
+                        Specify strategy class name that should be used by the
+                        bot.
   --strategy-path PATH  Specify additional strategy lookup path.
   --db-url PATH         Override trades database URL, this is useful in custom
                         deployments (default: `sqlite:///tradesv3.sqlite` for
