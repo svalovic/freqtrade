@@ -36,7 +36,7 @@ class StrategyResolver(IResolver):
             raise OperationalException("No strategy set. Please use `--strategy` to specify "
                                        "the strategy class to use.")
 
-        strategy_name = config.get('strategy')
+        strategy_name = config['strategy']
         self.strategy: IStrategy = self._load_strategy(strategy_name,
                                                        config=config,
                                                        extra_dir=config.get('strategy_path'))
