@@ -6,11 +6,25 @@ if version_info.major == 3 and version_info.minor < 6 or \
     print('Your Python interpreter must be 3.6 or greater!')
     exit(1)
 
-from freqtrade import __version__
+from pathlib import Path  # noqa: E402
+from freqtrade import __version__  # noqa: E402
+
+
+readme_file = Path(__file__).parent / "README.md"
+readme_long = "Crypto Trading Bot"
+if readme_file.is_file():
+    readme_long = (Path(__file__).parent / "README.md").read_text()
 
 # Requirements used for submodules
 api = ['flask']
 plot = ['plotly>=4.0']
+hyperopt = [
+    'scipy',
+    'scikit-learn',
+    'scikit-optimize',
+    'filelock',
+    'joblib',
+    ]
 
 develop = [
     'coveralls',
@@ -29,23 +43,26 @@ jupyter = [
     'jupyter',
     'nbstripout',
     'ipykernel',
+    'nbconvert',
     ]
 
-all_extra = api + plot + develop + jupyter
+all_extra = api + plot + develop + jupyter + hyperopt
 
 setup(name='freqtrade',
       version=__version__,
       description='Crypto Trading Bot',
+      long_description=readme_long,
+      long_description_content_type="text/markdown",
       url='https://github.com/freqtrade/freqtrade',
-      author='gcarq and contributors',
+      author='Freqtrade Team',
       author_email='michael.egger@tsn.at',
       license='GPLv3',
       packages=['freqtrade'],
       setup_requires=['pytest-runner', 'numpy'],
-      tests_require=['pytest', 'pytest-mock', 'pytest-cov'],
+      tests_require=['pytest', 'pytest-asyncio', 'pytest-cov', 'pytest-mock', ],
       install_requires=[
           # from requirements-common.txt
-          'ccxt>=1.18',
+          'ccxt>=1.18.1080',
           'SQLAlchemy',
           'python-telegram-bot',
           'arrow',
@@ -53,30 +70,28 @@ setup(name='freqtrade',
           'requests',
           'urllib3',
           'wrapt',
-          'scikit-learn',
-          'joblib',
           'jsonschema',
           'TA-Lib',
           'tabulate',
-          'coinmarketcap',
-          'scikit-optimize',
-          'filelock',
+          'pycoingecko',
           'py_find_1st',
           'python-rapidjson',
           'sdnotify',
           'colorama',
+          'jinja2',
+          'questionary',
+          'prompt-toolkit',
           # from requirements.txt
           'numpy',
           'pandas',
-          'scipy',
       ],
       extras_require={
           'api': api,
           'dev': all_extra,
           'plot': plot,
-          'all': all_extra,
           'jupyter': jupyter,
-          
+          'hyperopt': hyperopt,
+          'all': all_extra,
       },
       include_package_data=True,
       zip_safe=False,
@@ -86,8 +101,12 @@ setup(name='freqtrade',
           ],
       },
       classifiers=[
-          'Programming Language :: Python :: 3.6',
-          'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-          'Topic :: Office/Business :: Financial :: Investment',
+          'Environment :: Console',
           'Intended Audience :: Science/Research',
+          'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+          'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7',
+          'Operating System :: MacOS',
+          'Operating System :: Unix',
+          'Topic :: Office/Business :: Financial :: Investment',
       ])
